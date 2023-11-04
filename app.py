@@ -1,16 +1,31 @@
 import os
 from google.cloud import texttospeech
 import streamlit as st
+from google.oauth2 import service_account
+import googleapiclient.discovery
 
 st.set_page_config(
     page_title="My  App",
     page_icon="🎵",
 )
 
-google_credentials_path = st.secrets["GOOGLE_APPLICATION_CREDENTIALS_PATH"]
 
-# Set the environment variable
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = google_credentials_path
+credentials = service_account.Credentials.from_service_account_info(
+    {
+        "type": st.secrets["type"],
+        "project_id": st.secrets["project_id"],
+        "private_key_id": st.secrets["private_key_id"],
+        "private_key": st.secrets["private_key"],
+        "client_email": st.secrets["client_email"],
+        "client_id": st.secrets["client_id"],
+        "auth_uri": st.secrets["auth_uri"],
+        "token_uri": st.secrets["token_uri"],
+        "auth_provider_x509_cert_url": st.secrets["auth_provider_x509_cert_url"],
+        "client_x509_cert_url": st.secrets["client_x509_cert_url"],
+    }
+)
+
+
 
 def synthesize_speech(text,lang='日本語',gender='default'):
     lang_code = {'英語':"en-US",'日本語':'ja-JP'}
@@ -19,7 +34,7 @@ def synthesize_speech(text,lang='日本語',gender='default'):
     
     gender_type_e = {'default':"en-US-Neural2-A",'male':"en-US-Neural2-D",'female':"en-US-Neural2-E"}
 
-    client = texttospeech.TextToSpeechClient()
+    client = texttospeech.TextToSpeechClient(credentials=credentials)
     synthesis_input = texttospeech.SynthesisInput(text=text)
 
     if lang_code[lang] == 'ja-JP':
