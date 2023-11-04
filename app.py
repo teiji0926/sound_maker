@@ -27,7 +27,6 @@ credentials = service_account.Credentials.from_service_account_info(
 
 
 
-
 def synthesize_speech(text,lang='日本語',gender='default'):
     lang_code = {'英語':"en-US",'日本語':'ja-JP'}
     
@@ -75,7 +74,7 @@ if input_data is not None:
     st.subheader('言語と話者の選択')
 
     lang = st.selectbox('言語を選択して',('日本語','英語'))
-    if lang == '日本語':
+    if lang == is not None :
         gender_type =st.selectbox('性別選択',['default','male','female'])
 
 st.markdown('## 音声生成')
